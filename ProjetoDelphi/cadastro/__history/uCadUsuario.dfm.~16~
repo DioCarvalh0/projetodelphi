@@ -1,0 +1,124 @@
+inherited frmCadUsuario: TfrmCadUsuario
+  Caption = 'Cadastro de Usu'#225'rio'
+  ClientHeight = 307
+  ClientWidth = 741
+  ExplicitWidth = 757
+  ExplicitHeight = 346
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited pgcPrincipal: TPageControl
+    Width = 741
+    Height = 269
+    ActivePage = tabManutencao
+    ExplicitWidth = 741
+    ExplicitHeight = 269
+    inherited tabListagem: TTabSheet
+      ExplicitLeft = 4
+      ExplicitTop = 24
+      ExplicitWidth = 733
+      ExplicitHeight = 241
+      inherited pnlListagemTopo: TPanel
+        Width = 733
+        ExplicitWidth = 733
+      end
+      inherited grdListagem: TDBGrid
+        Width = 733
+        Height = 176
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'usuarioId'
+            Width = 83
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'nome'
+            Width = 630
+            Visible = True
+          end>
+      end
+    end
+    inherited tabManutencao: TTabSheet
+      ExplicitLeft = 4
+      ExplicitTop = 24
+      ExplicitWidth = 733
+      ExplicitHeight = 241
+      object edtUsuarioId: TLabeledEdit
+        Tag = 1
+        Left = 8
+        Top = 32
+        Width = 121
+        Height = 21
+        EditLabel.Width = 33
+        EditLabel.Height = 13
+        EditLabel.Caption = 'C'#243'digo'
+        MaxLength = 10
+        NumbersOnly = True
+        TabOrder = 0
+      end
+      object edtNome: TLabeledEdit
+        Tag = 2
+        Left = 8
+        Top = 75
+        Width = 405
+        Height = 21
+        EditLabel.Width = 27
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Nome'
+        MaxLength = 50
+        TabOrder = 1
+      end
+      object edtSenha: TLabeledEdit
+        Tag = 2
+        Left = 8
+        Top = 118
+        Width = 405
+        Height = 21
+        EditLabel.Width = 30
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Senha'
+        MaxLength = 40
+        TabOrder = 2
+      end
+    end
+  end
+  inherited pnlRodape: TPanel
+    Top = 269
+    Width = 741
+    ExplicitTop = 269
+    ExplicitWidth = 741
+    inherited btnFechar: TBitBtn
+      Left = 653
+      ExplicitLeft = 653
+    end
+    inherited btnNavigator: TDBNavigator
+      Hints.Strings = ()
+    end
+  end
+  inherited qryListagem: TZQuery
+    SQL.Strings = (
+      'SELECT    usuarioId,'
+      '          nome,'
+      '          senha'
+      '  FROM usuarios'
+      '')
+    object qryListagemusuarioId: TIntegerField
+      DisplayLabel = 'C'#243'digo'
+      FieldName = 'usuarioId'
+      ReadOnly = True
+    end
+    object qryListagemnome: TWideStringField
+      DisplayLabel = 'Nome'
+      FieldName = 'nome'
+      Required = True
+      Size = 50
+    end
+    object qryListagemsenha: TWideStringField
+      DisplayLabel = 'Senha'
+      FieldName = 'senha'
+      Required = True
+      Size = 40
+    end
+  end
+end

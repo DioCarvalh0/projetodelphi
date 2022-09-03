@@ -1,0 +1,69 @@
+unit cControleEstoque;
+
+interface
+
+uses System.classes,
+     //lista de Units
+     Vcl.Controls,
+     Vcl.ExtCtrls,
+     Vcl.Dialogs,
+
+     //conectando o banco
+     ZAbstractConnection,
+     ZConnection,
+
+     //conectando a Query
+     ZAbstractRODataset,
+     ZAbstractDataset,
+     ZDataset,
+
+     //clientDataSet
+     Data.DB,
+     Datasnap.DBClient,
+
+     //FreeAndNil
+     System.SysUtils;
+
+type
+  TControleEstoque = class
+  private
+    ConexaoDB:TZConnection;
+    F_ProdutoId:Integer;
+    F_Quantidade:Double;
+  public
+    constructor Create(aConexao: TZConnection);
+    destructor Destroy; override;
+    function BaixarEstoque: Boolean;
+    function RetornarEstoque: Boolean;
+  published
+    property ProdutoId:Integer  read F_ProdutoId  write F_ProdutoId;
+    property Quantidade:Double  read F_Quantidade write F_Quantidade;
+  end;
+
+implementation
+
+{$region 'Constructor and Destructor'}
+constructor TControleEstoque.Create(aConexao:TZConnection);
+begin
+  ConexaoDB:=aConexao;
+end;
+
+destructor TControleEstoque.Destroy;
+begin
+
+  inherited;
+end;
+
+{$endregion}
+
+function TControleEstoque.BaixarEstoque: Boolean;
+begin
+
+end;
+
+function TControleEstoque.RetornarEstoque: Boolean;
+begin
+
+end;
+
+end.

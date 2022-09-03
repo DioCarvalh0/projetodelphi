@@ -1,0 +1,36 @@
+object frmSelecionarData: TfrmSelecionarData
+  Left = 0
+  Top = 0
+  BorderStyle = bsSizeToolWin
+  Caption = 'Selecionar Data'
+  ClientHeight = 261
+  ClientWidth = 467
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label4: TLabel
+    Left = 8
+    Top = 10
+    Width = 51
+    Height = 13
+    Caption = 'Data In'#237'cio'
+  end
+  object edtDataNascimento: TDateEdit
+    Left = 8
+    Top = 29
+    Width = 153
+    Height = 21
+    ClickKey = 114
+    DialogTitle = 'Selecione a Data'
+    NumGlyphs = 2
+    CalendarStyle = csDialog
+    TabOrder = 0
+  end
+end

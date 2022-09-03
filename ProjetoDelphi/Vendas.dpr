@@ -1,0 +1,53 @@
+program Vendas;
+
+uses
+  Vcl.Forms,
+  uPrincipal in 'uPrincipal.pas' {frmPrincipal},
+  uDTMConexao in 'datamodule\uDTMConexao.pas' {dtmPrincipal: TDataModule},
+  uCadCategoria in 'cadastro\uCadCategoria.pas' {frmCadCategoria},
+  uCadCliente in 'cadastro\uCadCliente.pas' {frmCadCliente},
+  uTelaHeranca in 'heranca\uTelaHeranca.pas' {frmTelaHeranca},
+  Enter in 'terceiros\Enter.pas',
+  uEnum in 'heranca\uEnum.pas',
+  cCadCategoria in 'classes\cCadCategoria.pas',
+  cCadCliente in 'classes\cCadCliente.pas',
+  cCadProdutos in 'classes\cCadProdutos.pas',
+  uCadProduto in 'cadastro\uCadProduto.pas' {frmCadProduto},
+  uFrmAtualizaDB in 'datamodule\uFrmAtualizaDB.pas' {frmAtualizaDB},
+  uDTMVenda in 'datamodule\uDTMVenda.pas' {dtmVendas: TDataModule},
+  cProVendas in 'classes\cProVendas.pas',
+  uProVenda in 'processo\uProVenda.pas' {frmProVenda},
+  cControleEstoque in 'classes\cControleEstoque.pas',
+  uRelClienteFicha in 'relatorio\uRelClienteFicha.pas' {frmRelClienteFicha},
+  uRelVenda in 'relatorio\uRelVenda.pas' {frmRelVenda},
+  uRelCliente in 'relatorio\uRelCliente.pas' {frmRelCliente},
+  uRelCategoria in 'relatorio\uRelCategoria.pas' {frmRelCategoria},
+  uRelCadProduto in 'relatorio\uRelCadProduto.pas' {frmRelCadProduto},
+  uSelecionarData in 'relatorio\uSelecionarData.pas' {frmSelecionarData},
+  uRelCadProdutoGrupoCategoria in 'relatorio\uRelCadProdutoGrupoCategoria.pas' {frmRelCadProdutoGrupoCategoria},
+  uRelVendaPorData in 'relatorio\uRelVendaPorData.pas' {frmRelVendaPorData},
+  uFuncaoCriptografia in 'heranca\uFuncaoCriptografia.pas',
+  uCadUsuario in 'cadastro\uCadUsuario.pas' {frmCadUsuario},
+  cCadUsuario in 'classes\cCadUsuario.pas',
+  uLogin in 'login\uLogin.pas' {frmLogin},
+  uAlterarSenha in 'login\uAlterarSenha.pas' {frmAlterarSenha},
+  cUsuarioLogado in 'classes\cUsuarioLogado.pas',
+  cAtualizacaoBancoDeDados in 'classes\cAtualizacaoBancoDeDados.pas',
+  cAtualizacaoTabelaMSSQL in 'classes\cAtualizacaoTabelaMSSQL.pas',
+  cAtualizacaoCampoMSSQL in 'classes\cAtualizacaoCampoMSSQL.pas',
+  cArquivoIni in 'classes\cArquivoIni.pas',
+  cAcaoAcesso in 'classes\cAcaoAcesso.pas',
+  uCadAcaoAcesso in 'cadastro\uCadAcaoAcesso.pas' {frmCadAcaoAcesso},
+  uUsuarioVsAcoes in 'login\uUsuarioVsAcoes.pas' {frmUsuarioVsAcoes},
+  uCadSubCategoria in 'cadastro\uCadSubCategoria.pas' {frmCadSubCategoria},
+  cCadSubCategoria in 'classes\cCadSubCategoria.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TfrmCadSubCategoria, frmCadSubCategoria);
+  Application.Run;
+end.

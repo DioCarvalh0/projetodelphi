@@ -1,0 +1,59 @@
+unit uTelaHeranca1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.DBCtrls, Vcl.Grids,
+  Vcl.DBGrids, Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask, Vcl.ExtCtrls, Vcl.ComCtrls,
+  ZAbstractRODataset, ZAbstractDataset, ZDataset, uDTMConexao;
+
+type
+  TgrdListagem = class(TForm)
+    pgcPrincipal: TPageControl;
+    tabListagem: TTabSheet;
+    pnlListagemTopo: TPanel;
+    mskPesquisar: TMaskEdit;
+    btnPesquisar: TBitBtn;
+    frmTelaHeranca: TDBGrid;
+    tabManutencao: TTabSheet;
+    pnlRodape: TPanel;
+    btnNovo: TBitBtn;
+    btnAlterar: TBitBtn;
+    btnCancelar: TBitBtn;
+    btnGravar: TBitBtn;
+    btnApagar: TBitBtn;
+    btnFechar: TBitBtn;
+    btnNavigator: TDBNavigator;
+    dtsListagem: TDataSource;
+    qryListagem: TZQuery;
+    procedure FormCreate(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  grdListagem: TgrdListagem;
+
+implementation
+
+{$R *.dfm}
+
+uses uCadCategoria;
+
+procedure TgrdListagem.btnFecharClick(Sender: TObject);
+begin
+  Close; //fechara a janela
+end;
+
+procedure TgrdListagem.FormCreate(Sender: TObject);
+begin
+    qryListagem.Connection := dtmPrincipal.ConexaoDB;
+    dtsListagem.DataSet    := qryListagem;
+    grdListagem.DataSource := dtsListagem;
+end;
+
+end.

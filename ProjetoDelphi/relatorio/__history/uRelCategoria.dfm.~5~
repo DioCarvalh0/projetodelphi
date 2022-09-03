@@ -1,0 +1,37 @@
+object frmRelCategoria: TfrmRelCategoria
+  Left = 0
+  Top = 0
+  Caption = 'frmRelCategoria'
+  ClientHeight = 201
+  ClientWidth = 447
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object qryCategorias: TZQuery
+    Connection = dtmPrincipal.ConexaoDB
+    SQL.Strings = (
+      'SELECT categoriaId, descricao FROM categorias')
+    Params = <>
+    Left = 112
+    Top = 24
+    object qryCategoriascategoriaId: TIntegerField
+      FieldName = 'categoriaId'
+      ReadOnly = True
+    end
+    object qryCategoriasdescricao: TWideStringField
+      FieldName = 'descricao'
+      Size = 30
+    end
+  end
+  object dtsCategorias: TDataSource
+    DataSet = qryCategorias
+    Left = 280
+    Top = 40
+  end
+end

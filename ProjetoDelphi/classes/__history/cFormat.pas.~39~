@@ -1,0 +1,87 @@
+unit cFormat;
+
+interface
+
+uses System.SysUtils, Vcl.StdCtrls, Classes, System.MaskUtils, System.StrUtils, uCadCliente;
+
+type
+    TFormato = (CNPJorCPF, TELorCEL, CEP);
+
+procedure //Formatar(Obj: TObject; Formato : TFormato; Extra : string = '');
+
+implementation
+
+function SomenteNumero(str : string) : string;
+var
+    x : integer;
+begin
+    Result := '';
+    for x := 0 to Length(str) - 1 do
+        if (str.Chars[x] In ['0'..'9']) then
+            Result := Result + str.Chars[x];
+end;
+
+function Mask(Mascara, Str : string) : string;
+var
+    x, p : integer;
+begin
+    p := 0;
+    Result := '';
+
+    if Str.IsEmpty then
+        exit;
+
+    for x := 0 to Length(Mascara) - 1 do
+    begin
+        if Mascara.Chars[x] = '#' then
+        begin
+            Result := Result + Str.Chars[p];
+            inc(p);
+        end
+        else
+            Result := Result + Mascara.Chars[x];
+
+        if p = Length(Str) then
+            break;
+    end;
+end;
+
+//procedure Formatar(Obj: TObject; Formato : TFormato; Extra : string = '');
+//var
+//    texto : string;
+//begin
+//    TThread.Queue(Nil, procedure
+//    begin
+//        if obj is TEdit then
+//            texto := TEdit(obj).Text;
+//
+//         Telefone Fixo ou Celular...
+//        if formato = TELorCEL then
+//            if Length(SomenteNumero(texto)) <= 10 then
+//                texto := Mask('(##) ####-####', SomenteNumero(texto))
+//            else
+//                texto := Mask('(##) #####-####', SomenteNumero(texto));
+
+        // CNPJ ou CPF...
+//        if formato = CNPJorCPF then
+//            if Length(SomenteNumero(texto)) <= 11 then
+//                texto := Mask('###.###.###-##', SomenteNumero(texto))
+//            else
+//                texto := Mask('##.###.###/####-##', SomenteNumero(texto));
+//
+        // CEP...
+//        if Formato = CEP then
+//            texto := Mask('##.###-###', SomenteNumero(texto));
+//
+//        if obj is TEdit then
+//        begin
+//            TEdit(obj).Text := texto;
+//            TEdit(obj).SelStart:=Length(TEdit(obj).Text);
+//        end;
+//
+//    end);
+
+//end;
+
+end.
+

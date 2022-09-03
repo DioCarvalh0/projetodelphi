@@ -1,0 +1,89 @@
+object dtmVenda: TdtmVenda
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 195
+  Width = 581
+  object qryCliente: TZQuery
+    Connection = dtmPrincipal.ConexaoDB
+    SQL.Strings = (
+      'SELECT clienteId, nome FROM clientes')
+    Params = <>
+    Left = 40
+    Top = 16
+    object qryClienteclienteId: TIntegerField
+      DisplayLabel = 'C'#243'digo'
+      FieldName = 'clienteId'
+      ReadOnly = True
+    end
+    object qryClientenome: TWideStringField
+      DisplayLabel = 'Nome'
+      FieldName = 'nome'
+      Size = 60
+    end
+  end
+  object qryProduto: TZQuery
+    Connection = dtmPrincipal.ConexaoDB
+    SQL.Strings = (
+      'SELECT produtoId, nome, valor, quantidade FROM produtos')
+    Params = <>
+    Left = 104
+    Top = 16
+    object qryProdutoprodutoId: TIntegerField
+      FieldName = 'C'#243'digo'
+      ReadOnly = True
+    end
+    object qryProdutonome: TWideStringField
+      FieldName = 'nome'
+      Size = 60
+    end
+    object qryProdutovalor: TFloatField
+      FieldName = 'valor'
+    end
+    object qryProdutoquantidade: TFloatField
+      FieldName = 'quantidade'
+    end
+  end
+  object cdsItensVenda: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 176
+    Top = 16
+    object cdsItensVendaprodutoId: TIntegerField
+      FieldName = 'produtoId'
+    end
+    object cdsItensVendaNomeProduto: TStringField
+      FieldName = 'NomeProduto'
+      Size = 60
+    end
+    object cdsItensVendaquantidade: TFloatField
+      FieldName = 'quantidade'
+    end
+    object cdsItensVendavalorUnitario: TFloatField
+      FieldName = 'valorUnitario'
+    end
+    object cdsItensVendavalorTotalProduto: TFloatField
+      FieldName = 'valorTotalProduto'
+    end
+    object cdsItensVendavalorTotalVenda: TAggregateField
+      FieldName = 'valorTotalVenda'
+      DisplayName = ''
+      Expression = 'SUM(ValorTotalProduto)'
+    end
+  end
+  object dtsCliente: TDataSource
+    DataSet = qryCliente
+    Left = 40
+    Top = 72
+  end
+  object dtsProdutos: TDataSource
+    DataSet = qryProduto
+    Left = 104
+    Top = 72
+  end
+  object dtsItensVenda: TDataSource
+    DataSet = cdsItensVenda
+    Left = 176
+    Top = 72
+  end
+end

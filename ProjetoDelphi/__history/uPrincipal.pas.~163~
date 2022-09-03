@@ -1,0 +1,315 @@
+unit uPrincipal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, uDTMConexao, Enter, uFrmAtualizaDB, cUsuarioLogado,
+  Vcl.ComCtrls, ZDbcIntfs, cAtualizacaoBancoDeDados, cArquivoIni, RLReport;
+
+type
+  TfrmPrincipal = class(TForm)
+    mainPrincipal: TMainMenu;
+    CADASTRO1: TMenuItem;
+    MOVIMENTAO1: TMenuItem;
+    mniCliente1: TMenuItem;
+    mniN1: TMenuItem;
+    Categoria1: TMenuItem;
+    Produto1: TMenuItem;
+    N1: TMenuItem;
+    Venda1: TMenuItem;
+    mnuFechar: TMenuItem;
+    RELATRIO1: TMenuItem;
+    Cliente1: TMenuItem;
+    mniN2: TMenuItem;
+    Produto2: TMenuItem;
+    Vendapordata1: TMenuItem;
+    Categoria2: TMenuItem;
+    N2: TMenuItem;
+    FICHADECLIENTE1: TMenuItem;
+    ProdutosporCategoria1: TMenuItem;
+    Usurio1: TMenuItem;
+    N3: TMenuItem;
+    AlterarSenha1: TMenuItem;
+    stbPrincipal: TStatusBar;
+    AoAcesso1: TMenuItem;
+    N4: TMenuItem;
+    UsuriosVsAes1: TMenuItem;
+    N5: TMenuItem;
+    procedure mnuFecharClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Categoria1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure mniCliente1Click(Sender: TObject);
+    procedure Produto1Click(Sender: TObject);
+    procedure Venda1Click(Sender: TObject);
+    procedure Categoria2Click(Sender: TObject);
+    procedure Cliente1Click(Sender: TObject);
+    procedure FICHADECLIENTE1Click(Sender: TObject);
+    procedure Produto2Click(Sender: TObject);
+    procedure ProdutosporCategoria1Click(Sender: TObject);
+    procedure Vendapordata1Click(Sender: TObject);
+    procedure Usurio1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure AlterarSenha1Click(Sender: TObject);
+    procedure AoAcesso1Click(Sender: TObject);
+    procedure UsuriosVsAes1Click(Sender: TObject);
+  private
+    { Private declarations }
+    TeclaEnter: TMREnter;
+    procedure AtualizacaoBancoDados(aForm:TfrmAtualizaDB);
+    procedure CriarForm(aNomeForm: TFormClass);
+    procedure CriarRelatorio(aNomeForm: TFormClass);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPrincipal: TfrmPrincipal;
+  oUsuarioLogado: TUsuarioLogado;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  uCadCategoria, uCadCliente, uCadProduto, uProVenda, uRelCategoria, uRelCliente, uRelClienteFicha, uRelCadProduto, uRelCadProdutoGrupoCategoria, uSelecionarData, uRelVendaPorData, uCadUsuario, uLogin, uAlterarSenha, cAcaoAcesso, uCadAcaoAcesso, uUsuarioVsAcoes, uTelaHeranca;
+
+procedure TfrmPrincipal.Categoria1Click(Sender: TObject);
+begin
+  CriarForm(TfrmCadCategoria);
+end;
+
+procedure TfrmPrincipal.Categoria2Click(Sender: TObject);
+begin
+  CriarRelatorio(TfrmRelCategoria);
+end;
+
+procedure TfrmPrincipal.Cliente1Click(Sender: TObject);
+begin
+  CriarRelatorio(TfrmRelCliente);
+end;
+
+procedure TfrmPrincipal.FICHADECLIENTE1Click(Sender: TObject);
+begin
+  CriarRelatorio(TfrmRelClienteFicha);
+end;
+
+procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
+// tudo que for criado no muno principal, tem que ser destruido no Onclose do Event
+begin
+      FreeAndNil(TeclaEnter);
+      FreeAndNil(dtmPrincipal);
+
+      if Assigned(oUsuarioLogado) then
+          FreeAndNil(oUsuarioLogado);
+end;
+
+procedure TfrmPrincipal.FormCreate(Sender: TObject);
+begin
+{
+      dtmPrincipal := TdtmPrincipal.Create(Self);
+      dtmPrincipal.ConexaoDB.SQLHourGlass:=True;
+      dtmPrincipal.ConexaoDB.Protocol := 'mssql';
+      dtmPrincipal.ConexaoDB.LibraryLocation:='C:\Users\devmv\Downloads\ProjetoDelphi\ntwdblib.dll';
+      dtmPrincipal.ConexaoDB.HostName:='.\SERVERCURSO';
+      dtmPrincipal.ConexaoDB.Port:=1433;
+      dtmPrincipal.ConexaoDB.User:='sa';
+      dtmPrincipal.ConexaoDB.Password:='adm23123';
+      dtmPrincipal.ConexaoDB.Database:='vendas';
+      dtmPrincipal.ConexaoDB.Connected:=true;
+ }
+
+      if not FileExists(TArquivoIni.ArquivoIni) then
+      begin
+        TArquivoIni.AtualizarIni('SERVER', 'TipoDataBase', 'MSSQL');
+        TArquivoIni.AtualizarIni('SERVER', 'HostName', '.\');
+        TArquivoIni.AtualizarIni('SERVER', 'Port', '1433');
+        TArquivoIni.AtualizarIni('SERVER', 'Database', 'vendas');
+
+        MessageDlg('Arquivo '+ TArquivoIni.ArquivoIni +#13+'criado com sucesso!' +#13+
+                   'Configure o arquivo antes de inicializar a aplicação.',mtInformation,[mbOK],0);
+
+        Application.Terminate;
+      end
+      else begin
+
+        frmAtualizaDB := TfrmAtualizaDB.Create(Self);
+        frmAtualizaDB.Show;
+        frmAtualizaDB.Refresh;
+
+        dtmPrincipal := TdtmPrincipal.Create(Self);
+        with dtmPrincipal.ConexaoDB do
+        begin
+            Connected:=False;
+            SQLHourGlass:=True;
+            if TArquivoIni.LerIni('SERVER','TipoDataBase')='MSSQL' then
+               Protocol := 'mssql'; //Protocolo do banco de dados
+            LibraryLocation:='C:\Users\devmv\Documents\ProjetoDelphi\ntwdblib.dll';
+            HostName:=TArquivoIni.LerIni('SERVER','HostName'); //Instancia do SQLServer
+            Port:=StrToInt(TArquivoIni.LerIni('SERVER','Port')); //Porta do SQLServer
+            Database:=TArquivoIni.LerIni('SERVER','DataBase'); //Nome do banco de dados
+            AutoCommit:=true;
+            TransactIsolationLevel:=tiReadCommitted;
+            Connected:=true;
+        end;
+
+        AtualizacaoBancoDados(frmAtualizaDB);
+
+        TAcaoAcesso.CriarAcoes(TfrmCadCategoria, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmCadCliente, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmCadProduto, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmCadUsuario, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmCadAcaoAcesso, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmAlterarSenha, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmProVenda, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmRelVendaPorData, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmRelClienteFicha, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmRelCliente, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmRelCadProdutoGrupoCategoria, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmRelCadProduto, dtmPrincipal.ConexaoDB);
+        TAcaoAcesso.CriarAcoes(TfrmRelCategoria, dtmPrincipal.ConexaoDB);
+
+        TAcaoAcesso.PreencherUsuariosVsAcoes(dtmPrincipal.ConexaoDB);
+
+        frmAtualizaDB.Free;
+
+        TeclaEnter:=TMREnter.Create(Self); // instanciando a tecla enter
+        TeclaEnter.FocusEnabled:=true; // habilita o modo de cor
+        TeclaEnter.FocusColor:=clInfoBk; // tipo de cor amarelo
+      end;
+end;
+
+procedure TfrmPrincipal.FormShow(Sender: TObject);
+begin
+  try
+    oUsuarioLogado := TUsuarioLogado.Create;
+
+    frmLogin:=TfrmLogin.Create(Self);
+    frmLogin.ShowModal;
+  finally
+    frmLogin.Release;
+    stbPrincipal.Panels[0].Text:='USUÁRIO: '+oUsuarioLogado.nome;
+  end;
+end;
+
+procedure TfrmPrincipal.mniCliente1Click(Sender: TObject);
+begin
+  CriarForm(TfrmCadCliente);
+end;
+
+procedure TfrmPrincipal.mnuFecharClick(Sender: TObject);
+begin
+     Application.Terminate; // Fechar a tela Principal. close tb tem a mesma função
+end;
+
+procedure TfrmPrincipal.Produto1Click(Sender: TObject);
+begin
+  CriarForm(TfrmCadProduto);
+end;
+
+procedure TfrmPrincipal.Produto2Click(Sender: TObject);
+begin
+  CriarRelatorio(TfrmRelCadProduto);
+end;
+
+procedure TfrmPrincipal.ProdutosporCategoria1Click(Sender: TObject);
+begin
+  CriarRelatorio(TfrmRelCadProdutoGrupoCategoria);
+end;
+
+procedure TfrmPrincipal.Usurio1Click(Sender: TObject);
+begin
+  CriarForm(TfrmCadUsuario);
+end;
+
+procedure TfrmPrincipal.UsuriosVsAes1Click(Sender: TObject);
+begin
+  CriarForm(TfrmUsuarioVsAcoes);
+end;
+
+procedure TfrmPrincipal.Venda1Click(Sender: TObject);
+begin
+  CriarForm(TfrmProVenda);
+end;
+
+procedure TfrmPrincipal.Vendapordata1Click(Sender: TObject);
+begin
+
+  Try
+    frmSelecionarData:=TfrmSelecionarData.Create(Self);
+    frmSelecionarData.ShowModal;
+
+    frmRelVendaPorData:=TfrmRelVendaPorData.Create(Self);
+    frmRelVendaPorData.qryVenda.Close;
+    frmRelVendaPorData.qryVenda.ParamByName('DataInicio').AsDate:=frmSelecionarData.edtDataInicio.Date;
+    frmRelVendaPorData.qryVenda.ParamByName('DataFim').AsDate:=frmSelecionarData.edtDataFinal.Date;
+    frmRelVendaPorData.qryVenda.Open;
+    frmRelVendaPorData.Relatorio.PreviewModal;
+  Finally
+    frmSelecionarData.Release;
+    frmRelVendaPorData.Release;
+  End;
+
+end;
+
+procedure TfrmPrincipal.AlterarSenha1Click(Sender: TObject);
+begin
+  CriarForm(TfrmAlterarSenha);
+end;
+
+procedure TfrmPrincipal.AoAcesso1Click(Sender: TObject);
+begin
+  CriarForm(TfrmCadAcaoAcesso);
+end;
+
+procedure TfrmPrincipal.AtualizacaoBancoDados(aForm:TfrmAtualizaDB);
+var oAtualizarMSSQL:TAtualizaBancoDadosMSSQL;
+begin
+  AForm.Refresh;
+
+  try
+    oAtualizarMSSQL:=TAtualizaBancoDadosMSSQL.Create(dtmPrincipal.ConexaoDB);
+    oAtualizarMSSQL.AtualizarBancoDeDadosMSSQL;
+  finally
+    if Assigned(oAtualizarMSSQL) then
+      FreeAndNil(oAtualizarMSSQL);
+  end;
+
+end;
+
+procedure TfrmPrincipal.CriarForm(aNomeForm: TFormClass);
+var form: TForm;
+begin
+  try
+    form := aNomeForm.Create(Application);
+    if TfrmTelaHeranca.TenhoAcesso(oUsuarioLogado.codigo, form.Name, dtmPrincipal.ConexaoDB) then
+    form.ShowModal;
+  finally
+    if Assigned(form) then
+      form.Release;
+  end;
+end;
+
+procedure TfrmPrincipal.CriarRelatorio(aNomeForm: TFormClass);
+var form: TForm;
+    aRelatorio:TRLReport;
+    i:Integer;
+begin
+  try
+    form := aNomeForm.Create(Application);
+    for I := 0 to form.ComponentCount -1 do
+    begin
+      if form.Components[i] is TRLReport then
+      begin
+        TRLReport(form.Components[i]).PreviewModal;
+        Break;
+      end;
+    end;
+  finally
+    if Assigned(form) then
+      form.Release;
+  end;
+end;
+
+end.
